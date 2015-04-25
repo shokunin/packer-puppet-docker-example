@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "DOCKERHUB_EMAIL"    : "{{ env `DOCKERHUB_EMAIL` }}",
+    "DOCKERHUB_USERNAME" : "{{ env `DOCKERHUB_USERNAME` }}",
+    "DOCKERHUB_PASSWORD" : "{{ env `DOCKERHUB_PASSWORD` }}",
+    "DOCKERHUB_SERVER"   : "hub.docker.com"
+  },
+  "provisioners": [
+    {
+      "type"   : "shell",
+      "inline" : [
+        "sudo apt-get update && sudo apt-get -y upgrade",
+        "sudo apt-get -y install puppet",
+        "sudo mkdir -p /tmp/hieradata"
+      ]
+    },
+    {
+      "type"        : "file",
+      "source"      : "puppet/ext/hieradata",
+      "destination" : "/tmp"
+    },
+    {
+      "type"              : "puppet-masterless",
+      "manifest_file"     : "./puppet/site.pp",
+      "module_paths"      : "./puppet/modules",
+      "hiera_config_path" : "./puppet/ext/hiera.yaml",
+      "execute_command"   : "{{.FacterVars}}{{if .Sudo}} sudo -E {{end}}puppet apply  --verbose --parser future --modulepath='{{.ModulePath}}'  --hiera_config='{{.HieraConfigPath}}' --detailed-exitcodes  {{.ManifestFile}}"
+    }
+  ],
+  "builders": [
+    {
+      "type"        : "docker",
+      "image"       : "ubuntu",
+      "export_path" : "img.tar"
+    }
+  ],
+  "post-processors": [
+    [{
+      "type"       : "docker-import",
+      "repository" : "maguec/packer-puppet-example",
+      "tag"        : "latest"
+    },
+    { 
+       "type"           : "docker-push",
+       "login"          : true,
+       "login_email"    : "{{user `DOCKERHUB_EMAIL`}}",
+       "login_username" : "{{user `DOCKERHUB_USERNAME`}}",
+       "login_password" : "{{user `DOCKERHUB_PASSWORD`}}",
+       "login_server"   : "{{user `DOCKERHUB_SERVER`}}"
+     }]
+  ]
+}

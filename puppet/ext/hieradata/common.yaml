@@ -1,0 +1,7 @@
+---
+classes:
+  - ubuntu_pkgs
+
+
+ubuntu_pkgs:
+  - zsh
