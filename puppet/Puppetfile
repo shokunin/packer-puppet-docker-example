@@ -1,0 +1,3 @@
+mod 'ubuntu_pkgs',
+  :git => 'https://github.com/shokunin/ubuntu_pkgs.git',
+  :ref => 'master'

@@ -1,3 +1,4 @@
 set_env.sh
 Gemfile.lock
 .rvmrc
+puppet/modules/*
