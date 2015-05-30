@@ -36,3 +36,7 @@ sudo packer build packer.json
 5) Running the container
 
 ```
+docker pull maguec/packer-puppet-example
+docker run --name test123  maguec/packer-puppet-example "/bin/ps"
+```
+
