@@ -3,7 +3,7 @@
     "DOCKERHUB_EMAIL"    : "{{ env `DOCKERHUB_EMAIL` }}",
     "DOCKERHUB_USERNAME" : "{{ env `DOCKERHUB_USERNAME` }}",
     "DOCKERHUB_PASSWORD" : "{{ env `DOCKERHUB_PASSWORD` }}",
-    "DOCKERHUB_SERVER"   : "index.docker.io"
+    "DOCKERHUB_SERVER"   : "{{ env `DOCKERHUB_SERVER` }}"
   },
   "provisioners": [
     {
